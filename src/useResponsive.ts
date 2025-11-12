@@ -41,7 +41,7 @@ import {
   getFormContentWidth,
   getFormElementSpacing,
   DeviceType,
-} from '../utils/responsive';
+} from './responsive';
 
 export interface UseResponsiveReturn {
   // Device info
