@@ -1,0 +1,48 @@
+{
+  "name": "@umituz/react-native-design-system-responsive",
+  "version": "1.0.0",
+  "description": "Responsive design utilities for React Native - Screen dimensions, device detection, and responsive sizing utilities",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "tsc --noEmit",
+    "version:minor": "npm version minor -m 'chore: release v%s'",
+    "version:major": "npm version major -m 'chore: release v%s'"
+  },
+  "keywords": [
+    "react-native",
+    "design-system",
+    "responsive",
+    "utilities",
+    "screen-dimensions",
+    "device-detection"
+  ],
+  "author": "Ümit UZ <umit@umituz.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/umituz/react-native-design-system-responsive"
+  },
+  "peerDependencies": {
+    "react": ">=18.2.0 || ^19.0.0",
+    "react-native": ">=0.74.0",
+    "react-native-safe-area-context": "^5.6.2"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.45",
+    "@types/react-native": "^0.73.0",
+    "react": "^18.2.0",
+    "react-native": "^0.74.0",
+    "typescript": "^5.3.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ]
+}
+
