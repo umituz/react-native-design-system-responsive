@@ -11,7 +11,7 @@
  */
 
 // Hook exports
-export { useResponsive } from './useResponsive';
+export { useResponsive, useResponsiveSizes, useDeviceType } from './useResponsive';
 export type { UseResponsiveReturn } from './useResponsive';
 
 // Utility function exports
