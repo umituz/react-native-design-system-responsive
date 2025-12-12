@@ -15,11 +15,12 @@ import { DEVICE_BREAKPOINTS } from '../src/config';
 
 // Mock Dimensions
 jest.mock('react-native', () => ({
-  ...jest.requireActual('react-native'),
   Dimensions: {
-    get: jest.fn(),
+    get: jest.fn(() => ({ width: 414, height: 896 })),
   },
 }));
+
+const mockDimensions = jest.mocked(require('react-native').Dimensions.get);
 
 describe('deviceDetection', () => {
   beforeEach(() => {
@@ -28,18 +29,18 @@ describe('deviceDetection', () => {
 
   describe('getScreenDimensions', () => {
     it('should return screen dimensions', () => {
-      (Dimensions.get as jest.Mock).mockReturnValue({ width: 414, height: 896 });
+      mockDimensions.mockReturnValue({ width: 414, height: 896 });
       
       const result = getScreenDimensions();
       
-      expect(Dimensions.get).toHaveBeenCalledWith('window');
+      expect(mockDimensions).toHaveBeenCalledWith('window');
       expect(result).toEqual({ width: 414, height: 896 });
     });
   });
 
   describe('isSmallPhone', () => {
     it('should return true for small phone width', () => {
-      (Dimensions.get as jest.Mock).mockReturnValue({ width: DEVICE_BREAKPOINTS.SMALL_PHONE, height: 667 });
+      mockDimensions.mockReturnValue({ width: DEVICE_BREAKPOINTS.SMALL_PHONE, height: 667 });
       
       const result = isSmallPhone();
       
@@ -47,7 +48,7 @@ describe('deviceDetection', () => {
     });
 
     it('should return false for regular phone width', () => {
-      (Dimensions.get as jest.Mock).mockReturnValue({ width: DEVICE_BREAKPOINTS.MEDIUM_PHONE, height: 896 });
+      mockDimensions.mockReturnValue({ width: DEVICE_BREAKPOINTS.MEDIUM_PHONE, height: 896 });
       
       const result = isSmallPhone();
       
@@ -57,7 +58,7 @@ describe('deviceDetection', () => {
 
   describe('isTablet', () => {
     it('should return true for tablet width', () => {
-      (Dimensions.get as jest.Mock).mockReturnValue({ width: DEVICE_BREAKPOINTS.TABLET, height: 768 });
+      mockDimensions.mockReturnValue({ width: DEVICE_BREAKPOINTS.TABLET, height: 768 });
       
       const result = isTablet();
       
@@ -65,7 +66,7 @@ describe('deviceDetection', () => {
     });
 
     it('should return false for phone width', () => {
-      (Dimensions.get as jest.Mock).mockReturnValue({ width: DEVICE_BREAKPOINTS.MEDIUM_PHONE, height: 896 });
+      mockDimensions.mockReturnValue({ width: DEVICE_BREAKPOINTS.MEDIUM_PHONE, height: 896 });
       
       const result = isTablet();
       
@@ -75,7 +76,7 @@ describe('deviceDetection', () => {
 
   describe('isLandscape', () => {
     it('should return true in landscape orientation', () => {
-      (Dimensions.get as jest.Mock).mockReturnValue({ width: 896, height: 414 });
+      mockDimensions.mockReturnValue({ width: 896, height: 414 });
       
       const result = isLandscape();
       
@@ -83,7 +84,7 @@ describe('deviceDetection', () => {
     });
 
     it('should return false in portrait orientation', () => {
-      (Dimensions.get as jest.Mock).mockReturnValue({ width: 414, height: 896 });
+      mockDimensions.mockReturnValue({ width: 414, height: 896 });
       
       const result = isLandscape();
       
@@ -93,7 +94,7 @@ describe('deviceDetection', () => {
 
   describe('getDeviceType', () => {
     it('should return SMALL_PHONE for small phone width', () => {
-      (Dimensions.get as jest.Mock).mockReturnValue({ width: DEVICE_BREAKPOINTS.SMALL_PHONE, height: 667 });
+      mockDimensions.mockReturnValue({ width: DEVICE_BREAKPOINTS.SMALL_PHONE, height: 667 });
       
       const result = getDeviceType();
       
@@ -101,7 +102,7 @@ describe('deviceDetection', () => {
     });
 
     it('should return MEDIUM_PHONE for medium phone width', () => {
-      (Dimensions.get as jest.Mock).mockReturnValue({ width: DEVICE_BREAKPOINTS.MEDIUM_PHONE, height: 896 });
+      mockDimensions.mockReturnValue({ width: DEVICE_BREAKPOINTS.MEDIUM_PHONE, height: 896 });
       
       const result = getDeviceType();
       
@@ -109,7 +110,7 @@ describe('deviceDetection', () => {
     });
 
     it('should return LARGE_PHONE for large phone width', () => {
-      (Dimensions.get as jest.Mock).mockReturnValue({ width: DEVICE_BREAKPOINTS.LARGE_PHONE, height: 926 });
+      mockDimensions.mockReturnValue({ width: DEVICE_BREAKPOINTS.LARGE_PHONE, height: 926 });
       
       const result = getDeviceType();
       
@@ -117,7 +118,7 @@ describe('deviceDetection', () => {
     });
 
     it('should return TABLET for tablet width', () => {
-      (Dimensions.get as jest.Mock).mockReturnValue({ width: DEVICE_BREAKPOINTS.TABLET, height: 768 });
+      mockDimensions.mockReturnValue({ width: DEVICE_BREAKPOINTS.TABLET, height: 768 });
       
       const result = getDeviceType();
       

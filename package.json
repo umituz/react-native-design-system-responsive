@@ -1,6 +1,6 @@
 {
   "name": "@umituz/react-native-design-system-responsive",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "description": "Responsive design utilities for React Native - Screen dimensions, device detection, and responsive sizing utilities",
   "main": "./src/index.ts",
   "types": "./src/index.ts",

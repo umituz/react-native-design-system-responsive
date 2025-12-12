@@ -3,15 +3,12 @@
  */
 
 module.exports = {
-  preset: 'ts-jest/presets/default-esm',
+  preset: 'ts-jest',
   testEnvironment: 'node',
-  extensionsToTreatAsEsm: ['.ts'],
-  globals: {
-    'ts-jest': {
-      useESM: true,
-    },
-  },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  transform: {
+    '^.+\\.(ts|tsx)$': 'ts-jest',
+  },
   transformIgnorePatterns: [
     'node_modules/(?!(react-native|@react-native|@react-native-community|react-native-safe-area-context)/)',
   ],
