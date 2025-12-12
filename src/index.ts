@@ -33,15 +33,32 @@ export {
   isLandscape,
   getKeyboardBehavior,
   getDeviceType,
-  getMinTouchTargetSize,
   getSpacingMultiplier,
-  getOnboardingIconMarginTop,
-  getOnboardingIconMarginBottom,
-  getOnboardingTitleMarginBottom,
-  getOnboardingTextPadding,
-  getOnboardingDescriptionMarginTop,
   DeviceType,
 } from './responsive';
+
+// Configuration exports
+export {
+  DEVICE_BREAKPOINTS,
+  RESPONSIVE_PERCENTAGES,
+  SIZE_CONSTRAINTS,
+  LAYOUT_CONSTANTS,
+  HEIGHT_THRESHOLDS,
+  GRID_CONFIG,
+  VALIDATION_CONSTRAINTS,
+} from './config';
+
+// Validation exports
+export {
+  ResponsiveValidationError,
+  validateNumber,
+  validateFontSize,
+  validateScreenDimensions,
+  validateSafeAreaInsets,
+  validateGridColumns,
+  clamp,
+  safePercentage,
+} from './validation';
 
 // Platform constants exports
 export {

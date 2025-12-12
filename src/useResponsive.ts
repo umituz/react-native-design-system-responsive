@@ -10,6 +10,7 @@
  * ```
  */
 
+import { useCallback, useMemo } from 'react';
 import { useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
@@ -28,18 +29,8 @@ import {
   isTablet,
   isLandscape,
   getDeviceType,
-  getMinTouchTargetSize,
+  getMinTouchTarget,
   getSpacingMultiplier,
-  getOnboardingIconMarginTop,
-  getOnboardingIconMarginBottom,
-  getOnboardingTitleMarginBottom,
-  getOnboardingTextPadding,
-  getOnboardingDescriptionMarginTop,
-  getOnboardingIconSize,
-  getFormBottomPadding,
-  getInputIconSize,
-  getFormContentWidth,
-  getFormElementSpacing,
   DeviceType,
 } from './responsive';
 
@@ -49,7 +40,7 @@ export interface UseResponsiveReturn {
   height: number;
   isSmallDevice: boolean;
   isTabletDevice: boolean;
-  isLandscapeMode: boolean;
+  isLandscapeDevice: boolean;
   deviceType: DeviceType;
 
   // Safe area insets
@@ -78,20 +69,6 @@ export interface UseResponsiveReturn {
   gridColumns: number;
   spacingMultiplier: number;
 
-  // Onboarding-specific spacing (pre-calculated, device-aware)
-  onboardingIconMarginTop: number;
-  onboardingIconMarginBottom: number;
-  onboardingIconSize: number;
-  onboardingTitleMarginBottom: number;
-  onboardingTextPadding: number;
-  onboardingDescriptionMarginTop: number;
-
-  // Form-specific spacing (pre-calculated, universal)
-  formBottomPadding: number;
-  inputIconSize: number;
-  formContentWidth: number | undefined;
-  formElementSpacing: number;
-
   // Utility functions
   getLogoSize: (baseSize?: number) => number;
   getInputHeight: (baseHeight?: number) => number;
@@ -109,13 +86,22 @@ export const useResponsive = (): UseResponsiveReturn => {
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
 
-  return {
+  // Memoize utility functions to prevent unnecessary re-renders
+  const getLogoSize = useCallback((baseSize?: number) => getResponsiveLogoSize(baseSize), []);
+  const getInputHeight = useCallback((baseHeight?: number) => getResponsiveInputHeight(baseHeight), []);
+  const getIconSize = useCallback((baseSize?: number) => getResponsiveIconContainerSize(baseSize), []);
+  const getMaxWidth = useCallback((baseWidth?: number) => getResponsiveMaxWidth(baseWidth), []);
+  const getFontSize = useCallback((baseFontSize: number) => getResponsiveFontSize(baseFontSize), []);
+  const getGridCols = useCallback((mobile?: number, tablet?: number) => getResponsiveGridColumns(mobile, tablet), []);
+
+  // Memoize responsive values to prevent unnecessary recalculations
+  const responsiveValues = useMemo(() => ({
     // Device info
     width,
     height,
     isSmallDevice: isSmallPhone(),
     isTabletDevice: isTablet(),
-    isLandscapeMode: isLandscape(),
+    isLandscapeDevice: isLandscape(),
     deviceType: getDeviceType(),
 
     // Safe area insets
@@ -126,11 +112,11 @@ export const useResponsive = (): UseResponsiveReturn => {
     inputHeight: getResponsiveInputHeight(),
     iconContainerSize: getResponsiveIconContainerSize(),
     maxContentWidth: getResponsiveMaxWidth(),
-    minTouchTarget: getMinTouchTargetSize(),
+    minTouchTarget: getMinTouchTarget(),
 
     // Responsive positioning
-    horizontalPadding: getResponsiveHorizontalPadding(16, insets),
-    bottomPosition: getResponsiveBottomPosition(32, insets),
+    horizontalPadding: getResponsiveHorizontalPadding(undefined, insets),
+    bottomPosition: getResponsiveBottomPosition(undefined, insets),
     fabPosition: getResponsiveFABPosition(insets),
 
     // Responsive layout
@@ -139,28 +125,16 @@ export const useResponsive = (): UseResponsiveReturn => {
     gridColumns: getResponsiveGridColumns(),
     spacingMultiplier: getSpacingMultiplier(),
 
-    // Onboarding-specific spacing (pre-calculated, no component calculations)
-    onboardingIconMarginTop: getOnboardingIconMarginTop(),
-    onboardingIconMarginBottom: getOnboardingIconMarginBottom(),
-    onboardingIconSize: getOnboardingIconSize(),
-    onboardingTitleMarginBottom: getOnboardingTitleMarginBottom(),
-    onboardingTextPadding: getOnboardingTextPadding(),
-    onboardingDescriptionMarginTop: getOnboardingDescriptionMarginTop(),
+    // Utility functions (memoized)
+    getLogoSize,
+    getInputHeight,
+    getIconSize,
+    getMaxWidth,
+    getFontSize,
+    getGridCols,
+  }), [width, height, insets]);
 
-    // Form-specific spacing (pre-calculated, universal)
-    formBottomPadding: getFormBottomPadding(insets.bottom),
-    inputIconSize: getInputIconSize(),
-    formContentWidth: getFormContentWidth(),
-    formElementSpacing: getFormElementSpacing(),
-
-    // Utility functions (allow custom base values)
-    getLogoSize: (baseSize) => getResponsiveLogoSize(baseSize),
-    getInputHeight: (baseHeight) => getResponsiveInputHeight(baseHeight),
-    getIconSize: (baseSize) => getResponsiveIconContainerSize(baseSize),
-    getMaxWidth: (baseWidth) => getResponsiveMaxWidth(baseWidth),
-    getFontSize: (baseFontSize) => getResponsiveFontSize(baseFontSize),
-    getGridCols: (mobile, tablet) => getResponsiveGridColumns(mobile, tablet),
-  };
+  return responsiveValues;
 };
 
 /**
