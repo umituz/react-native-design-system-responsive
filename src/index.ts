@@ -11,7 +11,7 @@
  */
 
 // Hook exports
-export { useResponsive, useResponsiveSizes, useDeviceType } from './useResponsive';
+export { useResponsive } from './useResponsive';
 export type { UseResponsiveReturn } from './useResponsive';
 
 // Utility function exports
@@ -31,39 +31,18 @@ export {
   getResponsiveMaxWidth,
   getResponsiveFontSize,
   isLandscape,
-  getKeyboardBehavior,
   getDeviceType,
-  getSpacingMultiplier,
   DeviceType,
 } from './responsive';
 
-// Configuration exports
-export {
-  DEVICE_BREAKPOINTS,
-  RESPONSIVE_PERCENTAGES,
-  SIZE_CONSTRAINTS,
-  LAYOUT_CONSTANTS,
-  HEIGHT_THRESHOLDS,
-  GRID_CONFIG,
-  VALIDATION_CONSTRAINTS,
-} from './config';
+// Device detection exports
+export { getSpacingMultiplier } from './deviceDetection';
 
-// Validation exports
-export {
-  ResponsiveValidationError,
-  validateNumber,
-  validateFontSize,
-  validateScreenDimensions,
-  validateSafeAreaInsets,
-  validateGridColumns,
-  clamp,
-  safePercentage,
-} from './validation';
+
 
 // Platform constants exports
 export {
   IOS_HIG,
-  ANDROID_MATERIAL,
   PLATFORM_CONSTANTS,
   isValidTouchTarget,
   getMinTouchTarget,

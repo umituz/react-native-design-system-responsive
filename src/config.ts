@@ -131,9 +131,9 @@ export const GRID_CONFIG = {
  */
 export const VALIDATION_CONSTRAINTS = {
   MIN_BASE_SIZE: 0,               // Minimum valid base size
-  MAX_BASE_SIZE: 10000,           // Maximum valid base size
+  MAX_BASE_SIZE: 1000,            // Maximum valid base size (realistic UI limit)
   MIN_BASE_FONT_SIZE: 1,          // Minimum valid font size
   MAX_BASE_FONT_SIZE: 1000,       // Maximum valid font size
   MIN_SCREEN_DIMENSION: 100,      // Minimum valid screen dimension
-  MAX_SCREEN_DIMENSION: 10000,    // Maximum valid screen dimension
+  MAX_SCREEN_DIMENSION: 5000,     // Maximum valid screen dimension (realistic)
 } as const;

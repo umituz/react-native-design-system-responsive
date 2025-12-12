@@ -131,7 +131,7 @@ export const getResponsiveFABPosition = (
     return {
       bottom: Math.max(
         LAYOUT_CONSTANTS.TAB_BAR_OFFSET, 
-        bottom + LAYOUT_CONSTANTS.TAB_BAR_OFFSET
+        bottom + LAYOUT_CONSTANTS.SAFE_AREA_OFFSET
       ),
       right: Math.max(
         LAYOUT_CONSTANTS.FAB_RIGHT_PHONE, 

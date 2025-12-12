@@ -30,9 +30,9 @@ import {
   isLandscape,
   getDeviceType,
   getMinTouchTarget,
-  getSpacingMultiplier,
   DeviceType,
 } from './responsive';
+import { getSpacingMultiplier } from './deviceDetection';
 
 export interface UseResponsiveReturn {
   // Device info
@@ -137,18 +137,4 @@ export const useResponsive = (): UseResponsiveReturn => {
   return responsiveValues;
 };
 
-/**
- * Shorthand hook for just responsive sizes
- */
-export const useResponsiveSizes = () => {
-  const { logoSize, inputHeight, iconContainerSize, maxContentWidth } = useResponsive();
-  return { logoSize, inputHeight, iconContainerSize, maxContentWidth };
-};
 
-/**
- * Shorthand hook for just device type checks
- */
-export const useDeviceType = () => {
-  const { isSmallDevice, isTabletDevice, deviceType } = useResponsive();
-  return { isSmallDevice, isTabletDevice, deviceType };
-};

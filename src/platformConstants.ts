@@ -35,34 +35,10 @@ export const IOS_HIG = {
    */
   MIN_TEXT_SIZE: 17,
 
-  /**
-   * Minimum Contrast Ratio
-   *
-   * WCAG AA compliance requires 4.5:1 for normal text.
-   */
-  MIN_CONTRAST_RATIO: 4.5,
+
 } as const;
 
-/**
- * Android Material Design Guidelines Constants
- *
- * @see https://m3.material.io/foundations/layout/applying-layout/window-size-classes
- */
-export const ANDROID_MATERIAL = {
-  /**
-   * Minimum Touch Target Size
-   *
-   * Material Design 3 recommends a minimum of 48dp x 48dp.
-   */
-  MIN_TOUCH_TARGET: 48,
 
-  /**
-   * Minimum Text Size
-   *
-   * Minimum font size for body text.
-   */
-  MIN_TEXT_SIZE: 14,
-} as const;
 
 /**
  * Universal Platform Constants
@@ -76,7 +52,7 @@ export const PLATFORM_CONSTANTS = {
    * Uses iOS requirement (44pt) as it's more restrictive than Android (48dp).
    * This ensures compliance on both platforms.
    */
-  MIN_TOUCH_TARGET: Math.max(IOS_HIG.MIN_TOUCH_TARGET, ANDROID_MATERIAL.MIN_TOUCH_TARGET),
+  MIN_TOUCH_TARGET: Math.max(IOS_HIG.MIN_TOUCH_TARGET, 48),
 
   /**
    * Recommended Touch Target Size
@@ -90,7 +66,7 @@ export const PLATFORM_CONSTANTS = {
    *
    * Uses iOS requirement as it's larger.
    */
-  MIN_TEXT_SIZE: Math.max(IOS_HIG.MIN_TEXT_SIZE, ANDROID_MATERIAL.MIN_TEXT_SIZE),
+  MIN_TEXT_SIZE: Math.max(IOS_HIG.MIN_TEXT_SIZE, 14),
 } as const;
 
 /**
@@ -112,13 +88,11 @@ export const isValidTouchTarget = (size: number): boolean => {
 export const getMinTouchTarget = (componentType: 'button' | 'input' | 'icon' | 'generic' = 'generic'): number => {
   switch (componentType) {
     case 'button':
-      return PLATFORM_CONSTANTS.RECOMMENDED_TOUCH_TARGET; // 48pt recommended for buttons
     case 'input':
-      return PLATFORM_CONSTANTS.RECOMMENDED_TOUCH_TARGET; // 48pt recommended for inputs
+      return PLATFORM_CONSTANTS.RECOMMENDED_TOUCH_TARGET; // 48pt recommended for buttons and inputs
     case 'icon':
-      return IOS_HIG.MIN_TOUCH_TARGET; // 44pt minimum for icon buttons
     case 'generic':
     default:
-      return IOS_HIG.MIN_TOUCH_TARGET; // 44pt minimum for all other interactive elements
+      return IOS_HIG.MIN_TOUCH_TARGET; // 44pt minimum for icons and generic elements
   }
 };

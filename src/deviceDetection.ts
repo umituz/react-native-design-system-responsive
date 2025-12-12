@@ -6,8 +6,30 @@
  */
 
 import { Dimensions } from 'react-native';
-import { DEVICE_BREAKPOINTS } from './config';
+import { DEVICE_BREAKPOINTS, LAYOUT_CONSTANTS } from './config';
 import { validateScreenDimensions } from './validation';
+
+/**
+ * Helper function for device detection with fallback
+ * @param operation - Operation to perform
+ * @param fallback - Fallback value if operation fails
+ * @param warningMessage - Warning message for __DEV__
+ * @returns Operation result or fallback
+ */
+const withDeviceDetectionFallback = <T>(
+  operation: () => T, 
+  fallback: T, 
+  warningMessage: string
+): T => {
+  try {
+    return operation();
+  } catch (error) {
+    if (__DEV__) {
+      console.warn(`[DeviceDetection] ${warningMessage}`);
+    }
+    return fallback;
+  }
+};
 
 /**
  * Device type enum for conditional rendering
@@ -44,15 +66,14 @@ export const getScreenDimensions = () => {
  * @returns true if device is a small phone
  */
 export const isSmallPhone = (): boolean => {
-  try {
-    const { width } = getScreenDimensions();
-    return width <= DEVICE_BREAKPOINTS.SMALL_PHONE;
-  } catch (error) {
-    if (__DEV__) {
-      console.warn('[isSmallPhone] Error detecting device type, assuming standard phone');
-    }
-    return false;
-  }
+  return withDeviceDetectionFallback(
+    () => {
+      const { width } = getScreenDimensions();
+      return width <= DEVICE_BREAKPOINTS.SMALL_PHONE;
+    },
+    false,
+    'Error detecting device type, assuming standard phone'
+  );
 };
 
 /**
@@ -60,15 +81,14 @@ export const isSmallPhone = (): boolean => {
  * @returns true if device is a tablet
  */
 export const isTablet = (): boolean => {
-  try {
-    const { width } = getScreenDimensions();
-    return width >= DEVICE_BREAKPOINTS.SMALL_TABLET;
-  } catch (error) {
-    if (__DEV__) {
-      console.warn('[isTablet] Error detecting device type, assuming phone');
-    }
-    return false;
-  }
+  return withDeviceDetectionFallback(
+    () => {
+      const { width } = getScreenDimensions();
+      return width >= DEVICE_BREAKPOINTS.SMALL_TABLET;
+    },
+    false,
+    'Error detecting device type, assuming phone'
+  );
 };
 
 /**
@@ -76,15 +96,14 @@ export const isTablet = (): boolean => {
  * @returns true if device is in landscape orientation
  */
 export const isLandscape = (): boolean => {
-  try {
-    const { width, height } = getScreenDimensions();
-    return width > height;
-  } catch (error) {
-    if (__DEV__) {
-      console.warn('[isLandscape] Error detecting orientation, assuming portrait');
-    }
-    return false;
-  }
+  return withDeviceDetectionFallback(
+    () => {
+      const { width, height } = getScreenDimensions();
+      return width > height;
+    },
+    false,
+    'Error detecting orientation, assuming portrait'
+  );
 };
 
 /**
@@ -92,22 +111,45 @@ export const isLandscape = (): boolean => {
  * @returns Device type enum value
  */
 export const getDeviceType = (): DeviceType => {
-  try {
-    const { width } = getScreenDimensions();
+  return withDeviceDetectionFallback(
+    () => {
+      const { width } = getScreenDimensions();
 
-    if (width <= DEVICE_BREAKPOINTS.SMALL_PHONE) {
-      return DeviceType.SMALL_PHONE;
-    } else if (width <= DEVICE_BREAKPOINTS.MEDIUM_PHONE) {
-      return DeviceType.MEDIUM_PHONE;
-    } else if (width <= DEVICE_BREAKPOINTS.LARGE_PHONE) {
-      return DeviceType.LARGE_PHONE;
-    }
+      if (width <= DEVICE_BREAKPOINTS.SMALL_PHONE) {
+        return DeviceType.SMALL_PHONE;
+      } else if (width <= DEVICE_BREAKPOINTS.MEDIUM_PHONE) {
+        return DeviceType.MEDIUM_PHONE;
+      } else if (width <= DEVICE_BREAKPOINTS.LARGE_PHONE) {
+        return DeviceType.LARGE_PHONE;
+      }
 
-    return DeviceType.TABLET;
-  } catch (error) {
-    if (__DEV__) {
-      console.warn('[getDeviceType] Error detecting device type, assuming medium phone');
-    }
-    return DeviceType.MEDIUM_PHONE;
-  }
+      return DeviceType.TABLET;
+    },
+    DeviceType.MEDIUM_PHONE,
+    'Error detecting device type, assuming medium phone'
+  );
+};
+
+/**
+ * Responsive spacing multiplier
+ * Returns a multiplier for spacing based on device size
+ * 
+ * @returns Spacing multiplier (0.9-1.2)
+ */
+export const getSpacingMultiplier = (): number => {
+  return withDeviceDetectionFallback(
+    () => {
+      const { width } = getScreenDimensions();
+
+      if (width <= DEVICE_BREAKPOINTS.SMALL_PHONE) {
+        return LAYOUT_CONSTANTS.SPACING_MULTIPLIER_SMALL;
+      } else if (width >= DEVICE_BREAKPOINTS.TABLET) {
+        return LAYOUT_CONSTANTS.SPACING_MULTIPLIER_TABLET;
+      }
+
+      return LAYOUT_CONSTANTS.SPACING_MULTIPLIER_STANDARD;
+    },
+    LAYOUT_CONSTANTS.SPACING_MULTIPLIER_STANDARD,
+    'Error calculating spacing multiplier, using fallback'
+  );
 };
